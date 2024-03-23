@@ -1,13 +1,38 @@
 import React from 'react'
 import { useState, useEffect } from 'react'
 import { FaSignInAlt } from 'react-icons/fa'
+import {useSelector, useDispatch} from 'react-redux'
+import {useNavigate} from 'react-router-dom'
+import {toast} from 'react-toastify'
+import { login, reset } from '../feature/auth/authSlice'
+
 
 const Login = () => {
   const {email, setEmail} = useState('')
   const {password, setPassword} = useState('')
 
+  const navigate = useNavigate()
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    if(isError) {
+      toast.error(message)
+    } 
+
+    if(isSuccess || user) {
+      navigate('/')
+    }
+
+    dispatch(reset())
+  }, [])
+
   const onSubmit = (e) => {
-    e.preventDefault();
+    e.preventDefault()
+    const userData = {
+      email,
+      password
+    }
+    dispatch(login(userData))
   }
 
   // const {name, email, password, password2} = formData;
